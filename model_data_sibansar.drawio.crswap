@@ -1,0 +1,145 @@
+<mxfile host="app.diagrams.net">
+  <diagram id="Oo9MXIV5OhbH4gVpiCp_" name="Halaman-1">
+    <mxGraphModel dx="1768" dy="971" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="10" parent="1" style="shape=table;startSize=30;container=1;collapsible=1;childLayout=tableLayout;fillColor=#d5e8d4;strokeColor=#82b366;" value="PENGAJUAN" vertex="1">
+          <mxGeometry height="300" width="230" x="250" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="13" parent="10" style="shape=tableRow;" value="nomor_surat_pengajuan" vertex="1">
+          <mxGeometry height="30" width="230" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="14" parent="10" style="shape=tableRow;" value="perihal" vertex="1">
+          <mxGeometry height="30" width="230" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="15" parent="10" style="shape=tableRow;" value="nama_kelompok" vertex="1">
+          <mxGeometry height="30" width="230" y="90" as="geometry" />
+        </mxCell>
+        <mxCell id="16" parent="10" style="shape=tableRow;" value="kode_kelompok" vertex="1">
+          <mxGeometry height="30" width="230" y="120" as="geometry" />
+        </mxCell>
+        <mxCell id="17" parent="10" style="shape=tableRow;" value="ketua" vertex="1">
+          <mxGeometry height="30" width="230" y="150" as="geometry" />
+        </mxCell>
+        <mxCell id="18" parent="10" style="shape=tableRow;" value="kabupaten" vertex="1">
+          <mxGeometry height="30" width="230" y="180" as="geometry" />
+        </mxCell>
+        <mxCell id="19" parent="10" style="shape=tableRow;" value="jenis_komoditi | luas_lahan" vertex="1">
+          <mxGeometry height="30" width="230" y="210" as="geometry" />
+        </mxCell>
+        <mxCell id="19b" parent="10" style="shape=tableRow;" value="jumlah_anggota | tanggal_pengajuan" vertex="1">
+          <mxGeometry height="30" width="230" y="240" as="geometry" />
+        </mxCell>
+        <mxCell id="19c" parent="10" style="shape=tableRow;" value="file_surat_pengajuan | status" vertex="1">
+          <mxGeometry height="30" width="230" y="270" as="geometry" />
+        </mxCell>
+        <mxCell id="20" parent="1" style="shape=table;startSize=30;container=1;collapsible=1;childLayout=tableLayout;fillColor=#d5e8d4;strokeColor=#82b366;" value="PENGAJUAN_ITEMS" vertex="1">
+          <mxGeometry height="150" width="230" x="250" y="400" as="geometry" />
+        </mxCell>
+        <mxCell id="23" parent="20" style="shape=tableRow;" value="nama_barang" vertex="1">
+          <mxGeometry height="30" width="230" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="24" parent="20" style="shape=tableRow;" value="jenis_barang" vertex="1">
+          <mxGeometry height="30" width="230" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="25" parent="20" style="shape=tableRow;" value="jumlah_diminta | satuan_barang" vertex="1">
+          <mxGeometry height="30" width="230" y="90" as="geometry" />
+        </mxCell>
+        <mxCell id="26" parent="20" style="shape=tableRow;" value="jumlah_disetujui" vertex="1">
+          <mxGeometry height="30" width="230" y="120" as="geometry" />
+        </mxCell>
+        <mxCell id="30" parent="1" style="shape=table;startSize=30;container=1;collapsible=1;childLayout=tableLayout;fillColor=#fff2cc;strokeColor=#d6b656;" value="VERIFIKASI" vertex="1">
+          <mxGeometry height="180" width="240" x="610" y="90" as="geometry" />
+        </mxCell>
+        <mxCell id="34" parent="30" style="shape=tableRow;" value="tanggal_verifikasi" vertex="1">
+          <mxGeometry height="30" width="240" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="35" parent="30" style="shape=tableRow;" value="status_kelengkapan" vertex="1">
+          <mxGeometry height="30" width="240" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="36" parent="30" style="shape=tableRow;" value="kecocokan_data_profil" vertex="1">
+          <mxGeometry height="30" width="240" y="90" as="geometry" />
+        </mxCell>
+        <mxCell id="37" parent="30" style="shape=tableRow;" value="catatan_verifikator" vertex="1">
+          <mxGeometry height="30" width="240" y="120" as="geometry" />
+        </mxCell>
+        <mxCell id="38" parent="30" style="shape=tableRow;" value="kesimpulan" vertex="1">
+          <mxGeometry height="30" width="240" y="150" as="geometry" />
+        </mxCell>
+        <mxCell id="40" parent="1" style="shape=table;startSize=30;container=1;collapsible=1;childLayout=tableLayout;fillColor=#f8cecc;strokeColor=#b85450;" value="APPROVAL" vertex="1">
+          <mxGeometry height="180" width="240" x="930" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="44" parent="40" style="shape=tableRow;" value="nomor_surat_keputusan" vertex="1">
+          <mxGeometry height="30" width="240" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="45" parent="40" style="shape=tableRow;" value="nomor_surat_penolakan" vertex="1">
+          <mxGeometry height="30" width="240" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="46" parent="40" style="shape=tableRow;" value="tanggal_dikeluarkan" vertex="1">
+          <mxGeometry height="30" width="240" y="90" as="geometry" />
+        </mxCell>
+        <mxCell id="47" parent="40" style="shape=tableRow;" value="status_approval | alasan_penolakan" vertex="1">
+          <mxGeometry height="30" width="240" y="120" as="geometry" />
+        </mxCell>
+        <mxCell id="48" parent="40" style="shape=tableRow;" value="catatan_tambahan" vertex="1">
+          <mxGeometry height="30" width="240" y="150" as="geometry" />
+        </mxCell>
+        <mxCell id="50" parent="1" style="shape=table;startSize=30;container=1;collapsible=1;childLayout=tableLayout;fillColor=#e1d5e7;strokeColor=#9673a6;" value="PENJADWALAN_PENGIRIMAN" vertex="1">
+          <mxGeometry height="180" width="240" x="1250" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="53" parent="50" style="shape=tableRow;" value="nomor_surat_pengiriman" vertex="1">
+          <mxGeometry height="30" width="240" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="54" parent="50" style="shape=tableRow;" value="estimasi_tanggal_kirim" vertex="1">
+          <mxGeometry height="30" width="240" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="55" parent="50" style="shape=tableRow;" value="tujuan_pengiriman" vertex="1">
+          <mxGeometry height="30" width="240" y="90" as="geometry" />
+        </mxCell>
+        <mxCell id="56" parent="50" style="shape=tableRow;" value="nama_petugas_pengirim" vertex="1">
+          <mxGeometry height="30" width="240" y="120" as="geometry" />
+        </mxCell>
+        <mxCell id="57" parent="50" style="shape=tableRow;" value="status_pengiriman" vertex="1">
+          <mxGeometry height="30" width="240" y="150" as="geometry" />
+        </mxCell>
+        <mxCell id="60" parent="1" style="shape=table;startSize=30;container=1;collapsible=1;childLayout=tableLayout;fillColor=#f0a30a;fontColor=#000000;strokeColor=#BD7000;" value="PELAPORAN" vertex="1">
+          <mxGeometry height="210" width="240" x="610" y="680" as="geometry" />
+        </mxCell>
+        <mxCell id="62" parent="60" style="shape=tableRow;" value="jenis_laporan (pengajuan/verifikasi/approval)" vertex="1">
+          <mxGeometry height="30" width="240" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="63" parent="60" style="shape=tableRow;" value="periode_awal" vertex="1">
+          <mxGeometry height="30" width="240" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="64" parent="60" style="shape=tableRow;" value="periode_akhir" vertex="1">
+          <mxGeometry height="30" width="240" y="90" as="geometry" />
+        </mxCell>
+        <mxCell id="65" parent="60" style="shape=tableRow;" value="total_berkas_masuk" vertex="1">
+          <mxGeometry height="30" width="240" y="120" as="geometry" />
+        </mxCell>
+        <mxCell id="66" parent="60" style="shape=tableRow;" value="total_berkas_valid" vertex="1">
+          <mxGeometry height="30" width="240" y="150" as="geometry" />
+        </mxCell>
+        <mxCell id="67" parent="60" style="shape=tableRow;" value="total_bantuan_disetujui" vertex="1">
+          <mxGeometry height="30" width="240" y="180" as="geometry" />
+        </mxCell>
+        <mxCell id="81" edge="1" parent="1" source="20" style="edgeStyle=entityRelationEdgeStyle;endArrow=ERmanyToOne;startArrow=ERone;" target="10" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="82" edge="1" parent="1" source="30" style="edgeStyle=entityRelationEdgeStyle;endArrow=ERoneToOne;startArrow=ERoneToOne;" target="10" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="83" edge="1" parent="1" source="40" style="edgeStyle=entityRelationEdgeStyle;endArrow=ERoneToOne;startArrow=ERoneToOne;" target="30" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="84" edge="1" parent="1" source="50" style="edgeStyle=entityRelationEdgeStyle;endArrow=ERoneToOne;startArrow=ERoneToOne;" target="40" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="85" edge="1" parent="1" source="60" style="edgeStyle=entityRelationEdgeStyle;endArrow=ERmany;startArrow=ERmany;dashed=1;" target="10" value="direkap">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -1,0 +1,33 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('pengajuans', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->string('nama_kelompok_tani');
+            $table->date('tanggal_pengajuan');
+            $table->string('file_surat_pengajuan')->nullable(); // Path to Image
+            $table->enum('status', ['pending_operator', 'rejected_operator', 'pending_kabid', 'approved_full', 'approved_partial', 'rejected_kabid'])->default('pending_operator');
+            $table->text('alasan_penolakan')->nullable();
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('pengajuans');
+    }
+};
