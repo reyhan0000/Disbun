@@ -17,7 +17,7 @@
                 <div class="px-6 py-6 text-white">
                     <h1 class="text-2xl font-extrabold mb-1">Selamat Datang, {{ Auth::user()->name }}</h1>
                     @if(Auth::user()->role === 'admin')
-                        <p class="text-blue-100 text-base">Kelola semua user dan pantau status pengajuan bantuan.</p>
+                        <p class="text-blue-100 text-base">Kelola semua data pengguna sistem SIBANSAR melalui dasbor kontrol ini.</p>
                     @else
                         <p class="text-blue-100 text-base max-w-2xl">Pantau seluruh pergerakan pengajuan bantuan sarana dan prasarana di wilayah Anda secara real-time.</p>
                     @endif
@@ -77,40 +77,18 @@
             </div>
 
             <!-- Quick Actions for Admin -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div class="grid grid-cols-1 md:grid-cols-1 gap-6 mb-8">
                 <a href="{{ route('admin.users.index') }}" class="group bg-white rounded-xl p-5 border border-gray-100 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
                     <div class="flex items-center">
                         <div class="p-3 bg-indigo-100 rounded-lg group-hover:bg-indigo-200 transition-colors">
                             <svg class="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
                         </div>
                         <div class="ml-4">
-                            <p class="font-semibold text-gray-800">Kelola User</p>
-                            <p class="text-sm text-gray-500">Tambah, edit, hapus user</p>
+                            <p class="font-semibold text-gray-800">Manajemen Pengguna</p>
+                            <p class="text-sm text-gray-500">Tambah, perbarui, atau hapus akses pengguna sistem</p>
                         </div>
                     </div>
                 </a>
-                <a href="{{ route('operator.pengajuan.index') }}" class="group bg-white rounded-xl p-5 border border-gray-100 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
-                    <div class="flex items-center">
-                        <div class="p-3 bg-amber-100 rounded-lg group-hover:bg-amber-200 transition-colors">
-                            <svg class="w-6 h-6 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                        </div>
-                        <div class="ml-4">
-                            <p class="font-semibold text-gray-800">Antrean Verifikasi</p>
-                            <p class="text-sm text-gray-500">{{ $pengajuanStats['pending'] }} pengajuan pending</p>
-                        </div>
-                    </div>
-                </a>
-                <div class="group bg-white rounded-xl p-5 border border-gray-100">
-                    <div class="flex items-center">
-                        <div class="p-3 bg-emerald-100 rounded-lg">
-                            <svg class="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                        </div>
-                        <div class="ml-4">
-                            <p class="font-semibold text-gray-800">Total Pengajuan</p>
-                            <p class="text-sm text-gray-500">{{ $pengajuanStats['total'] }} pengajuan</p>
-                        </div>
-                    </div>
-                </div>
             </div>
 
             @else

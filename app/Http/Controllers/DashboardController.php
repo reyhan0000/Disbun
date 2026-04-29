@@ -36,14 +36,7 @@ class DashboardController extends Controller
                 ->groupBy('role')
                 ->get();
 
-            $pengajuanStats = [
-                'total' => Pengajuan::count(),
-                'pending' => Pengajuan::whereIn('status', ['pending_operator', 'pending_kabid'])->count(),
-                'disetujui' => Pengajuan::whereIn('status', ['approved_full', 'approved_partial', 'approved_kabid'])->count(),
-                'ditolak' => Pengajuan::whereIn('status', ['rejected_operator', 'rejected_kabid'])->count(),
-            ];
-
-            return view('dashboard.admin', compact('stats', 'userStats', 'pengajuanStats'));
+            return view('dashboard.admin', compact('stats', 'userStats'));
         } else {
             // Operator & Kabid Dashboard
             $stats = [

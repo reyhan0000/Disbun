@@ -32,20 +32,23 @@ class RegisteredUserController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
+            'kode_kelompok' => ['required', 'string', 'max:50'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
         $kelompokTaniService = app(\App\Services\KelompokTaniService::class);
         
-        if (!$kelompokTaniService->verify($request->name)) {
+        // Verifikasi berdasarkan nama dan kode_kelompok (lebih akurat)
+        if (!$kelompokTaniService->verify($request->name, $request->kode_kelompok)) {
             throw ValidationException::withMessages([
-                'name' => 'Gagal mendaftar: Nama Kelompok Tani ini tidak ditemukan di database pusat (API).',
+                'name' => 'Data yang anda masukan salah silahkan periksa kembali data yang anda masukan atau data anda belum terdaftar di Dinas Perkebunan. Silakan hubungi dinas terkait untuk melakukan pendaftaran kelompok tani Anda.',
             ]);
         }
 
         $user = User::create([
             'name' => $request->name,
+            'kode_kelompok' => $request->kode_kelompok,
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);

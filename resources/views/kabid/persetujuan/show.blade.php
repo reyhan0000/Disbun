@@ -19,7 +19,15 @@
                         <div><p class="text-sm text-gray-500">Nomor Surat</p><p class="font-medium">{{ $pengajuan->nomor_surat ?? '-' }}</p></div>
                         <div><p class="text-sm text-gray-500">Perihal</p><p class="font-medium">{{ $pengajuan->perihal ?? '-' }}</p></div>
                         <div><p class="text-sm text-gray-500">Tanggal Pengajuan</p><p class="font-medium">{{ \Carbon\Carbon::parse($pengajuan->tanggal_pengajuan)->format('d M Y H:i') }}</p></div>
-<div>
+                                <div>
+                                    <p class="text-sm text-gray-500">Kategori Bantuan</p>
+                                    <p class="font-medium">
+                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $pengajuan->kategori === 'prasarana' ? 'bg-purple-100 text-purple-800 border-purple-200' : 'bg-blue-100 text-blue-800 border-blue-200' }} border">
+                                            {{ strtoupper($pengajuan->kategori ?? 'SARANA') }}
+                                        </span>
+                                    </p>
+                                </div>
+                                <div>
                                     <p class="text-sm text-gray-500">Status</p>
                                     <p class="font-medium">
                                         <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800 border border-gray-200">
@@ -106,9 +114,10 @@
                             <thead class="bg-gray-50">
                                 <tr>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama Barang (Input Kebun / Pekebun)</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama Barang</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jenis</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jml Diminta</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Satuan</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Anggaran Disetujui (Rp)</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jml Disetujui</th>
                                 </tr>
@@ -120,6 +129,7 @@
                                         <td class="px-6 py-4 whitespace-nowrap">{{ $item->nama_barang }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap"><span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-emerald-100 text-emerald-800">{{ $item->jenis_barang ?? '-' }}</span></td>
                                         <td class="px-6 py-4 whitespace-nowrap">{{ $item->jumlah_diminta }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $item->satuan ?? '-' }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <input type="number" name="items[{{ $item->id }}][anggaran_disetujui]" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required min="0" placeholder="0">
                                         </td>
@@ -130,19 +140,6 @@
                                 @endforeach
                             </tbody>
                         </table>
-
-                        <div class="mb-8 mt-6">
-                            <div class="border-2 border-dashed border-emerald-300 rounded-lg p-6 bg-emerald-50 text-center hover:bg-emerald-100 transition-colors duration-200">
-                                <svg class="mx-auto h-12 w-12 text-emerald-500 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                                </svg>
-                                <label class="block text-emerald-800 text-lg font-bold mb-2" for="file_bast">
-                                    Upload Dokumen BAST
-                                </label>
-                                <p class="text-sm text-emerald-600 mb-4">Pilih file Berita Acara Serah Terima (Format: PDF, JPG, PNG)</p>
-                                <input class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100 mx-auto cursor-pointer border border-gray-300 rounded-lg bg-white shadow-sm p-1" id="file_bast" type="file" name="file_bast" accept=".pdf,.jpg,.jpeg,.png" required>
-                            </div>
-                        </div>
 
                         <div class="flex items-center space-x-4">
                             <button type="submit" class="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-bold py-2 px-6 rounded shadow-md transform transition hover:-translate-y-0.5 focus:outline-none focus:shadow-outline">
@@ -197,6 +194,7 @@
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jenis</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Anggaran (Rp)</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jml Diminta</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Satuan</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jml Disetujui</th>
                             </tr>
                         </thead>
@@ -210,6 +208,7 @@
                                         Rp {{ number_format($item->anggaran_disetujui ?? 0, 0, ',', '.') }}
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">{{ $item->jumlah_diminta }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $item->satuan ?? '-' }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap font-bold text-green-600">
                                         {{ $item->jumlah_disetujui ?? '-' }}
                                     </td>

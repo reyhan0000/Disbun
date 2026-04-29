@@ -71,14 +71,30 @@ class NotificationService
 
     public function notifyPersetujuan(Pengajuan $pengajuan, $keputusan, $note = '')
     {
+        // Notifikasi ke Petani
         $this->send(
             $pengajuan->user_id,
-            'Pengajuan Disedetujui/Ditolak',
+            'Status Pengajuan Bantuan',
             "Pengajuan {$pengajuan->nomor_surat} telah {$keputusan}. {$note}",
             'persetujuan',
             $pengajuan->id,
             Pengajuan::class
         );
+
+        // Jika disetujui Kabid, beri tahu Operator untuk unggah BAST
+        if ($pengajuan->status === 'approved_kabid') {
+            $operators = User::where('role', 'operator')->get();
+            foreach ($operators as $op) {
+                $this->send(
+                    $op->id,
+                    'Perlu Unggah BAST',
+                    "Pengajuan dari {$pengajuan->nama_kelompok_tani} telah disetujui Kabid. Silakan unggah dokumen BAST.",
+                    'persetujuan',
+                    $pengajuan->id,
+                    Pengajuan::class
+                );
+            }
+        }
     }
 
     public function notifyStatusChange(Pengajuan $pengajuan, $oldStatus, $newStatus)

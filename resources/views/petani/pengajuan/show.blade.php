@@ -29,15 +29,23 @@
                         <div><p class="text-sm text-gray-500">Nomor Surat</p><p class="font-medium">{{ $pengajuan->nomor_surat ?? '-' }}</p></div>
                         <div><p class="text-sm text-gray-500">Perihal</p><p class="font-medium">{{ $pengajuan->perihal ?? '-' }}</p></div>
                         <div><p class="text-sm text-gray-500">Tanggal Pengajuan</p><p class="font-medium">{{ \Carbon\Carbon::parse($pengajuan->tanggal_pengajuan)->format('d M Y H:i') }}</p></div>
-<div>
-                                    <p class="text-sm text-gray-500">Status Pengajuan</p>
-                                    <p class="font-medium">
-                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200">
-                                            {{ str_replace('_', ' ', strtoupper($pengajuan->status)) }}
-                                        </span>
-                                    </p>
-                                </div>
-                            </div>
+                        <div>
+                            <p class="text-sm text-gray-500">Kategori Bantuan</p>
+                            <p class="font-medium">
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $pengajuan->kategori === 'prasarana' ? 'bg-purple-100 text-purple-800 border-purple-200' : 'bg-blue-100 text-blue-800 border-blue-200' }} border">
+                                    {{ strtoupper($pengajuan->kategori ?? 'SARANA') }}
+                                </span>
+                            </p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-500">Status Pengajuan</p>
+                            <p class="font-medium">
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200">
+                                    {{ str_replace('_', ' ', strtoupper($pengajuan->status)) }}
+                                </span>
+                            </p>
+                        </div>
+                    </div>
 
                             @if($pengajuan->verified_at || $pengajuan->verified_kabid_at)
                             <div class="mt-4 p-4 bg-gray-50 border-l-4 border-gray-400 rounded">
@@ -117,6 +125,7 @@
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Anggaran (Rp)</th>
                                 @endif
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jumlah Diminta</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Satuan</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jumlah Disetujui</th>
                             </tr>
                         </thead>
@@ -130,6 +139,7 @@
                                     <td class="px-6 py-4 whitespace-nowrap text-green-600 font-medium">Rp {{ number_format($item->anggaran_disetujui ?? 0, 0, ',', '.') }}</td>
                                     @endif
                                     <td class="px-6 py-4 whitespace-nowrap">{{ $item->jumlah_diminta }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $item->satuan ?? '-' }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap font-bold text-green-600">
                                         {{ $item->jumlah_disetujui ?? '-' }}
                                     </td>

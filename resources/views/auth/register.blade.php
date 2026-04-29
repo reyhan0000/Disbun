@@ -13,6 +13,13 @@
             <x-input-error :messages="$errors->get('name')" class="mt-2" />
         </div>
 
+        <!-- Kode Kelompok -->
+        <div class="mt-4">
+            <x-input-label for="kode_kelompok" value="Kode Kelompok Tani" />
+            <x-text-input id="kode_kelompok" class="block mt-1 w-full" type="text" name="kode_kelompok" :value="old('kode_kelompok')" required placeholder="Contoh: 3278041007-002" />
+            <x-input-error :messages="$errors->get('kode_kelompok')" class="mt-2" />
+        </div>
+
         <!-- Email Address -->
         <div class="mt-4">
             <x-input-label for="email" value="Alamat Email" />

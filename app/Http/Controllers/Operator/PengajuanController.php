@@ -85,4 +85,35 @@ class PengajuanController extends Controller
             return redirect()->route('operator.pengajuan.index')->with('success', 'Pengajuan telah ditolak.');
         }
     }
+
+    public function uploadBast(Request $request, Pengajuan $pengajuan)
+    {
+        if ($pengajuan->status !== 'approved_kabid') {
+            return redirect()->back()->with('error', 'Status pengajuan harus disetujui Kabid terlebih dahulu.');
+        }
+
+        $request->validate([
+            'file_bast' => 'required|file|mimes:pdf,jpg,jpeg,png|max:5120',
+        ]);
+
+        $bastPath = $request->file('file_bast')->store('bast_files', 'public');
+
+        $semuaDisetujuiPenuh = true;
+        foreach ($pengajuan->items as $item) {
+            if ($item->jumlah_disetujui < $item->jumlah_diminta) {
+                $semuaDisetujuiPenuh = false;
+                break;
+            }
+        }
+
+        $pengajuan->update([
+            'status' => $semuaDisetujuiPenuh ? 'approved_full' : 'approved_partial',
+            'file_bast' => $bastPath,
+            'verification_notes' => 'Proses Selesai. Dokumen BAST telah diunggah oleh Operator.',
+        ]);
+
+        $this->notificationService->notifyPersetujuan($pengajuan, 'Selesai (BAST Diunggah)', 'Dokumen BAST telah diunggah oleh Operator. Proses pengajuan selesai.');
+
+        return redirect()->route('operator.pengajuan.show', $pengajuan)->with('success', 'Dokumen BAST berhasil diunggah. Pengajuan selesai.');
+    }
 }

@@ -10,10 +10,10 @@ class ProfilController extends Controller
 {
     public function index(Request $request, KelompokTaniService $kelompokTaniService)
     {
-        // Hanya memanggil API jika usernya kelompok tani (di-handle oleh middleware, tapi dipastikan lagi)
-        $apiData = $kelompokTaniService->getDetails($request->user()->name);
         $user = $request->user();
-
+        // Gunakan nama dan kode_kelompok user untuk pencarian API (lebih akurat)
+        $apiData = $kelompokTaniService->getDetails($user->name, $user->kode_kelompok);
+        
         return view('petani.profil.index', compact('apiData', 'user'));
     }
 }

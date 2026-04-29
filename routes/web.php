@@ -24,6 +24,23 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+// Test route untuk cek penyimpanan kode_kelompok
+Route::get('/test-save-kode', function() {
+    $user = \App\Models\User::latest()->first();
+    
+    // Coba update kode_kelompok
+    $user->kode_kelompok = '3278091006-005';
+    $saved = $user->save();
+    
+    return [
+        'user_id' => $user->id,
+        'name' => $user->name,
+        'kode_before' => 'null (before update)',
+        'kode_after' => $user->fresh()->kode_kelompok,
+        'save_success' => $saved,
+    ];
+});
+
 Route::middleware(['auth', 'role:kelompok_tani'])->prefix('petani')->name('petani.')->group(function () {
     Route::get('/profil', [ProfilController::class, 'index'])->name('profil.index');
     Route::get('/pengajuan', [App\Http\Controllers\Petani\PengajuanController::class, 'index'])->name('pengajuan.index');
@@ -39,6 +56,7 @@ Route::middleware(['auth', 'role:operator'])->prefix('operator')->name('operator
     Route::get('/pengajuan', [PengajuanController::class, 'index'])->name('pengajuan.index');
     Route::get('/pengajuan/{pengajuan}', [PengajuanController::class, 'show'])->name('pengajuan.show');
     Route::post('/pengajuan/{pengajuan}/verify', [PengajuanController::class, 'verify'])->name('pengajuan.verify');
+    Route::post('/pengajuan/{pengajuan}/upload-bast', [PengajuanController::class, 'uploadBast'])->name('pengajuan.uploadBast');
     Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan.index');
     Route::get('/laporan/filter', [LaporanController::class, 'filter'])->name('laporan.filter');
     Route::get('/laporan/print', [LaporanController::class, 'print'])->name('laporan.print');

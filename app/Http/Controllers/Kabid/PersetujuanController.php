@@ -52,10 +52,7 @@ class PersetujuanController extends Controller
             'items' => 'required|array',
             'items.*.anggaran_disetujui' => 'required|numeric|min:0',
             'items.*.jumlah_disetujui' => 'required|integer|min:0',
-            'file_bast' => 'required|file|mimes:pdf,jpg,jpeg,png|max:5120',
         ]);
-
-        $semuaDisetujuiPenuh = true;
 
         foreach ($request->items as $itemId => $data) {
             $item = $pengajuan->items()->findOrFail($itemId);
@@ -64,26 +61,18 @@ class PersetujuanController extends Controller
                 'anggaran_disetujui' => $data['anggaran_disetujui'],
                 'jumlah_disetujui' => $data['jumlah_disetujui'],
             ]);
-
-            if ($data['jumlah_disetujui'] < $item->jumlah_diminta) {
-                $semuaDisetujuiPenuh = false;
-            }
         }
 
-        $bastPath = $request->file('file_bast')->store('bast_files', 'public');
-
         $pengajuan->update([
-            'status' => $semuaDisetujuiPenuh ? 'approved_full' : 'approved_partial',
+            'status' => 'approved_kabid',
             'verified_kabid_by' => auth()->id(),
             'verified_kabid_at' => now(),
-            'verification_notes' => $semuaDisetujuiPenuh ? 'Disetujui Penuh' : 'Disetujui Sebagian',
-            'file_bast' => $bastPath,
+            'verification_notes' => 'Disetujui oleh Kabid. Menunggu unggah BAST oleh Operator.',
         ]);
 
-        $keputusan = $semuaDisetujuiPenuh ? 'Disetujui Penuh' : 'Disetujui Sebagian';
-        $this->notificationService->notifyPersetujuan($pengajuan, $keputusan, 'File BAST telah diunggah.');
+        $this->notificationService->notifyPersetujuan($pengajuan, 'Disetujui Kabid', 'Pengajuan Anda telah disetujui Kabid. Mohon tunggu Operator mengunggah dokumen BAST.');
 
-        return redirect()->route('kabid.persetujuan.index')->with('success', 'Pengajuan berhasil disetujui dan BAST telah diunggah.');
+        return redirect()->route('kabid.persetujuan.index')->with('success', 'Pengajuan berhasil disetujui. Tugas selanjutnya adalah Operator mengunggah BAST.');
     }
 
     public function reject(Request $request, Pengajuan $pengajuan)

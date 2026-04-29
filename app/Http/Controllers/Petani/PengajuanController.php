@@ -44,7 +44,8 @@ class PengajuanController extends Controller
 
     public function create()
     {
-        $apiData = $this->kelompokTaniService->getDetails(auth()->user()->name);
+        $user = auth()->user();
+        $apiData = $this->kelompokTaniService->getDetails(null, $user->kode_kelompok);
 
         return view('petani.pengajuan.create', compact('apiData'));
     }
@@ -55,15 +56,19 @@ class PengajuanController extends Controller
             'nomor_surat' => 'required|string|max:100',
             'perihal' => 'required|string|max:255',
             'file_surat_pengajuan' => 'required|mimes:pdf,jpg,jpeg,png|max:2048',
+            'kategori' => 'required|in:sarana,prasarana',
             'nama_barang' => 'required|array',
             'nama_barang.*' => 'required|string',
             'jenis_barang' => 'required|array',
             'jenis_barang.*' => 'required|string',
             'jumlah_diminta' => 'required|array',
             'jumlah_diminta.*' => 'required|integer|min:1',
+            'satuan' => 'required|array',
+            'satuan.*' => 'required|string|max:50',
         ]);
 
-        $apiData = $this->kelompokTaniService->getDetails(auth()->user()->name);
+        $user = auth()->user();
+        $apiData = $this->kelompokTaniService->getDetails(null, $user->kode_kelompok);
 
         if (! $apiData) {
             return back()->with('error', 'Gagal membuat pengajuan: Data Kelompok Tani tidak ditemukan di sistem pusat.');
@@ -89,6 +94,7 @@ class PengajuanController extends Controller
             'file_surat_pengajuan' => $filePath,
             'status' => $status,
             'alasan_penolakan' => $alasan,
+            'kategori' => $request->kategori,
         ]);
 
         foreach ($request->nama_barang as $index => $nama_barang) {
@@ -97,6 +103,7 @@ class PengajuanController extends Controller
                 'nama_barang' => $nama_barang,
                 'jenis_barang' => $request->jenis_barang[$index] ?? null,
                 'jumlah_diminta' => $request->jumlah_diminta[$index],
+                'satuan' => $request->satuan[$index] ?? null,
             ]);
         }
 

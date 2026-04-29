@@ -27,6 +27,7 @@ class Pengajuan extends Model
         'file_bast',
         'verified_kabid_by',
         'verified_kabid_at',
+        'kategori',
     ];
 
     public function items()

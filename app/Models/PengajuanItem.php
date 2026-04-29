@@ -12,7 +12,8 @@ class PengajuanItem extends Model
         'jenis_barang',
         'jumlah_diminta',
         'jumlah_disetujui',
-        'anggaran_disetujui'
+        'anggaran_disetujui',
+        'satuan',
     ];
 
     public function pengajuan()

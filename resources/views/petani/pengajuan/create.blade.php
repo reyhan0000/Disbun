@@ -108,7 +108,27 @@
                         </div>
 
                         <div class="mb-6 border-b border-emerald-100 pb-6">
-                            <h4 class="text-lg font-semibold text-emerald-800 mb-4 flex items-center"><span class="bg-emerald-600 text-white rounded-full w-6 h-6 inline-flex items-center justify-center text-sm mr-2">3</span> Dokumen Lampiran</h4>
+                            <h4 class="text-lg font-semibold text-emerald-800 mb-4 flex items-center"><span class="bg-emerald-600 text-white rounded-full w-6 h-6 inline-flex items-center justify-center text-sm mr-2">4</span> Kategori Bantuan <span class="text-red-500">*</span></h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <label class="flex items-center p-3 border rounded-md cursor-pointer hover:bg-emerald-50 transition-colors">
+                                    <input type="radio" name="kategori" value="sarana" checked class="form-radio text-emerald-600 h-5 w-5">
+                                    <div class="ml-3">
+                                        <span class="block font-bold text-gray-700">SARANA (Fisik / Barang Bergerak)</span>
+                                        <span class="text-xs text-gray-500">Contoh: Bibit, Pupuk, Mesin Traktor, Alat Semprot.</span>
+                                    </div>
+                                </label>
+                                <label class="flex items-center p-3 border rounded-md cursor-pointer hover:bg-emerald-50 transition-colors">
+                                    <input type="radio" name="kategori" value="prasarana" class="form-radio text-emerald-600 h-5 w-5">
+                                    <div class="ml-3">
+                                        <span class="block font-bold text-gray-700">PRASARANA (Infrastruktur / Bangunan)</span>
+                                        <span class="text-xs text-gray-500">Contoh: Gudang, Irigasi, Pembangunan Jalan Kebun.</span>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="mb-6 border-b border-emerald-100 pb-6">
+                            <h4 class="text-lg font-semibold text-emerald-800 mb-4 flex items-center"><span class="bg-emerald-600 text-white rounded-full w-6 h-6 inline-flex items-center justify-center text-sm mr-2">5</span> Dokumen Lampiran</h4>
                             <div class="mb-4">
                                 <label class="block text-gray-700 text-sm font-bold mb-2" for="file_surat_pengajuan">
                                     Scan Surat Pengajuan / Proposal Resmi (PDF/JPG) <span class="text-red-500">*</span>
@@ -119,19 +139,21 @@
                         </div>
 
                         <div class="mb-6">
-                            <h4 class="text-lg font-semibold text-emerald-800 mb-4 flex items-center"><span class="bg-emerald-600 text-white rounded-full w-6 h-6 inline-flex items-center justify-center text-sm mr-2">4</span> Rincian Bantuan yang Diajukan</h4>
+                            <h4 class="text-lg font-semibold text-emerald-800 mb-4 flex items-center"><span class="bg-emerald-600 text-white rounded-full w-6 h-6 inline-flex items-center justify-center text-sm mr-2">6</span> Rincian Bantuan yang Diajukan</h4>
                             <div id="items-container">
-                                <div class="flex items-center space-x-2 mb-2 item-row">
-                                    <input type="text" name="nama_barang[]" placeholder="Nama Barang (contoh: Traktor)" class="shadow appearance-none border rounded w-1/2 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
-                                    <select name="jenis_barang[]" class="shadow appearance-none border rounded w-1/4 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                                <div class="flex flex-wrap items-center space-x-2 mb-2 item-row">
+                                    <input type="text" name="nama_barang[]" placeholder="Nama Barang (contoh: Traktor)" class="shadow appearance-none border rounded flex-1 min-w-[200px] py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mb-2" required>
+                                    <select name="jenis_barang[]" class="shadow appearance-none border rounded w-48 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mb-2 jenis-barang-select" required onchange="updateSatuan(this)">
                                         <option value="">-- Pilih Jenis --</option>
                                         <option value="Bibit">Bibit</option>
                                         <option value="Pupuk">Pupuk</option>
                                         <option value="Alsintan">Alat Mesin Pertanian (Alsintan)</option>
                                         <option value="Obat-obatan">Obat-obatan</option>
+                                        <option value="Bangunan">Bangunan / Konstruksi</option>
                                         <option value="Lainnya">Lainnya</option>
                                     </select>
-                                    <input type="number" name="jumlah_diminta[]" placeholder="Jumlah" class="shadow appearance-none border rounded w-1/4 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required min="1">
+                                    <input type="number" name="jumlah_diminta[]" placeholder="Jml" class="shadow appearance-none border rounded w-24 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mb-2" required min="1">
+                                    <input type="text" name="satuan[]" placeholder="Satuan" class="shadow appearance-none border rounded w-32 py-2 px-3 text-gray-500 bg-gray-100 leading-tight focus:outline-none focus:shadow-outline mb-2 satuan-input" readonly required>
                                 </div>
                             </div>
                             <button type="button" id="add-item" class="mt-2 bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-1 px-3 rounded text-sm">
@@ -154,6 +176,21 @@
     </div>
 
     <script>
+        const satuanMapping = {
+            'Bibit': 'Batang',
+            'Pupuk': 'Kg',
+            'Alsintan': 'Unit',
+            'Obat-obatan': 'Liter',
+            'Bangunan': 'Paket',
+            'Lainnya': 'Unit'
+        };
+
+        function updateSatuan(selectElement) {
+            const row = selectElement.closest('.item-row');
+            const satuanInput = row.querySelector('.satuan-input');
+            satuanInput.value = satuanMapping[selectElement.value] || '';
+        }
+
         function confirmSubmit() {
             const nomorSurat = document.querySelector('input[name="nomor_surat"]').value || '-';
             const namaKebun = {!! json_encode($apiData['nama'] ?? Auth::user()->name) !!};
@@ -179,8 +216,22 @@
                 addBtn.addEventListener('click', function() {
                     const container = document.getElementById('items-container');
                     const row = document.createElement('div');
-                    row.className = 'flex items-center space-x-2 mb-2 item-row';
-                    row.innerHTML = '<input type="text" name="nama_barang[]" placeholder="Nama Barang" class="shadow appearance-none border rounded w-1/2 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required><select name="jenis_barang[]" class="shadow appearance-none border rounded w-1/4 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required><option value="">-- Pilih Jenis --</option><option value="Bibit">Bibit</option><option value="Pupuk">Pupuk</option><option value="Alsintan">Alat Mesin Pertanian (Alsintan)</option><option value="Obat-obatan">Obat-obatan</option><option value="Lainnya">Lainnya</option></select><input type="number" name="jumlah_diminta[]" placeholder="Jumlah" class="shadow appearance-none border rounded w-1/4 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required min="1"><button type="button" class="bg-red-500 hover:bg-red-700 text-white py-2 px-3 rounded remove-item" style="padding: 0.5rem 0.75rem;">X</button>';
+                    row.className = 'flex flex-wrap items-center space-x-2 mb-2 item-row';
+                    row.innerHTML = `
+                        <input type="text" name="nama_barang[]" placeholder="Nama Barang" class="shadow appearance-none border rounded flex-1 min-w-[200px] py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mb-2" required>
+                        <select name="jenis_barang[]" class="shadow appearance-none border rounded w-48 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mb-2 jenis-barang-select" required onchange="updateSatuan(this)">
+                            <option value="">-- Pilih Jenis --</option>
+                            <option value="Bibit">Bibit</option>
+                            <option value="Pupuk">Pupuk</option>
+                            <option value="Alsintan">Alat Mesin Pertanian (Alsintan)</option>
+                            <option value="Obat-obatan">Obat-obatan</option>
+                            <option value="Bangunan">Bangunan / Konstruksi</option>
+                            <option value="Lainnya">Lainnya</option>
+                        </select>
+                        <input type="number" name="jumlah_diminta[]" placeholder="Jml" class="shadow appearance-none border rounded w-24 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mb-2" required min="1">
+                        <input type="text" name="satuan[]" placeholder="Satuan" class="shadow appearance-none border rounded w-32 py-2 px-3 text-gray-500 bg-gray-100 leading-tight focus:outline-none focus:shadow-outline mb-2 satuan-input" readonly required>
+                        <button type="button" class="bg-red-500 hover:bg-red-700 text-white py-1 px-3 rounded remove-item mb-2" style="padding: 0.5rem 0.75rem;">X</button>
+                    `;
                     container.appendChild(row);
 
                     row.querySelector('.remove-item').addEventListener('click', function() {
