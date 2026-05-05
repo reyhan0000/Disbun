@@ -40,9 +40,19 @@ class RegisteredUserController extends Controller
         $kelompokTaniService = app(\App\Services\KelompokTaniService::class);
         
         // Verifikasi berdasarkan nama dan kode_kelompok (lebih akurat)
-        if (!$kelompokTaniService->verify($request->name, $request->kode_kelompok)) {
+        $verifyResult = $kelompokTaniService->verify($request->name, $request->kode_kelompok);
+
+        if ($verifyResult === null) {
+            // API tidak dapat dijangkau
             throw ValidationException::withMessages([
-                'name' => 'Data yang anda masukan salah silahkan periksa kembali data yang anda masukan atau data anda belum terdaftar di Dinas Perkebunan. Silakan hubungi dinas terkait untuk melakukan pendaftaran kelompok tani Anda.',
+                'name' => 'Sistem verifikasi dari Dinas Perkebunan sedang mengalami gangguan dan tidak dapat dijangkau. Pendaftaran tidak dapat dilakukan saat ini. Silakan coba beberapa saat lagi atau hubungi Administrator.',
+            ]);
+        }
+
+        if ($verifyResult === false) {
+            // API berhasil, data tidak ditemukan
+            throw ValidationException::withMessages([
+                'name' => 'Data yang Anda masukkan tidak ditemukan di database Dinas Perkebunan. Silakan periksa kembali Nama Kelompok Tani dan Kode Kelompok, atau hubungi Dinas terkait untuk melakukan pendaftaran kelompok tani Anda.',
             ]);
         }
 

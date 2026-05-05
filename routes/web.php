@@ -24,22 +24,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-// Test route untuk cek penyimpanan kode_kelompok
-Route::get('/test-save-kode', function() {
-    $user = \App\Models\User::latest()->first();
-    
-    // Coba update kode_kelompok
-    $user->kode_kelompok = '3278091006-005';
-    $saved = $user->save();
-    
-    return [
-        'user_id' => $user->id,
-        'name' => $user->name,
-        'kode_before' => 'null (before update)',
-        'kode_after' => $user->fresh()->kode_kelompok,
-        'save_success' => $saved,
-    ];
-});
+
 
 Route::middleware(['auth', 'role:kelompok_tani'])->prefix('petani')->name('petani.')->group(function () {
     Route::get('/profil', [ProfilController::class, 'index'])->name('profil.index');
@@ -55,8 +40,10 @@ Route::middleware(['auth', 'role:kelompok_tani'])->prefix('petani')->name('petan
 Route::middleware(['auth', 'role:operator'])->prefix('operator')->name('operator.')->group(function () {
     Route::get('/pengajuan', [PengajuanController::class, 'index'])->name('pengajuan.index');
     Route::get('/pengajuan/{pengajuan}', [PengajuanController::class, 'show'])->name('pengajuan.show');
+    Route::get('/pengajuan/{pengajuan}/print', [PengajuanController::class, 'print'])->name('pengajuan.print');
     Route::post('/pengajuan/{pengajuan}/verify', [PengajuanController::class, 'verify'])->name('pengajuan.verify');
     Route::post('/pengajuan/{pengajuan}/upload-bast', [PengajuanController::class, 'uploadBast'])->name('pengajuan.uploadBast');
+    Route::post('/pengajuan/{pengajuan}/upload-surat-penolakan', [PengajuanController::class, 'uploadSuratPenolakan'])->name('pengajuan.uploadSuratPenolakan');
     Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan.index');
     Route::get('/laporan/filter', [LaporanController::class, 'filter'])->name('laporan.filter');
     Route::get('/laporan/print', [LaporanController::class, 'print'])->name('laporan.print');
@@ -68,6 +55,7 @@ Route::middleware(['auth', 'role:operator'])->prefix('operator')->name('operator
 Route::middleware(['auth', 'role:kabid'])->prefix('kabid')->name('kabid.')->group(function () {
     Route::get('/persetujuan', [PersetujuanController::class, 'index'])->name('persetujuan.index');
     Route::get('/persetujuan/{pengajuan}', [PersetujuanController::class, 'show'])->name('persetujuan.show');
+    Route::get('/persetujuan/{pengajuan}/print', [PersetujuanController::class, 'print'])->name('persetujuan.print');
     Route::post('/persetujuan/{pengajuan}/approve', [PersetujuanController::class, 'approve'])->name('persetujuan.approve');
     Route::post('/persetujuan/{pengajuan}/reject', [PersetujuanController::class, 'reject'])->name('persetujuan.reject');
     Route::get('/laporan', [App\Http\Controllers\Kabid\LaporanController::class, 'index'])->name('laporan.index');

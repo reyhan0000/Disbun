@@ -7,9 +7,14 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
-            <div class="flex justify-end mb-4">
+            <div class="flex justify-between items-center mb-4">
                 <a href="{{ route('kabid.persetujuan.index') }}" class="inline-flex items-center text-sm text-gray-600 hover:text-emerald-700 bg-white border border-gray-300 rounded px-4 py-2 shadow-sm transition">
                     &larr; Kembali ke Daftar
+                </a>
+                <a href="{{ route('kabid.persetujuan.print', $pengajuan) }}" target="_blank"
+                    class="inline-flex items-center gap-2 text-sm bg-white border border-gray-300 hover:border-blue-400 hover:text-blue-700 text-gray-600 rounded px-4 py-2 shadow-sm transition">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+                    Cetak / PDF
                 </a>
             </div>
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
@@ -57,9 +62,9 @@
                             </div>
                             @endif
 
-                            <h3 class="text-lg font-bold mb-4 border-b pb-2 text-emerald-800">2. Profil Kebun / Pekebun</h3>
+                            <h3 class="text-lg font-bold mb-4 border-b pb-2 text-emerald-800">2. Profil Kelompok Tani</h3>
                     <div class="grid grid-cols-2 gap-4 mb-4">
-                        <div class="col-span-2"><p class="text-sm text-gray-500">Nama Kebun / Pekebun</p><p class="font-bold text-lg text-emerald-900">{{ $pengajuan->nama_kelompok_tani }}</p></div>
+                        <div class="col-span-2"><p class="text-sm text-gray-500">Nama Kelompok Tani</p><p class="font-bold text-lg text-emerald-900">{{ $pengajuan->nama_kelompok_tani }}</p></div>
                         <div><p class="text-sm text-gray-500">No Registrasi (SK)</p><p class="font-medium">{{ $pengajuan->no_kelompok_tani ?? '-' }}</p></div>
                         <div><p class="text-sm text-gray-500">Nama Ketua Kelompok</p><p class="font-medium">{{ $pengajuan->ketua_kelompok ?? '-' }}</p></div>
                         <div><p class="text-sm text-gray-500">Kabupaten/Kota</p><p class="font-medium">{{ $pengajuan->kabupaten_kota ?? '-' }}</p></div>
@@ -118,7 +123,6 @@
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jenis</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jml Diminta</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Satuan</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Anggaran Disetujui (Rp)</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jml Disetujui</th>
                                 </tr>
                             </thead>
@@ -130,9 +134,6 @@
                                         <td class="px-6 py-4 whitespace-nowrap"><span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-emerald-100 text-emerald-800">{{ $item->jenis_barang ?? '-' }}</span></td>
                                         <td class="px-6 py-4 whitespace-nowrap">{{ $item->jumlah_diminta }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $item->satuan ?? '-' }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <input type="number" name="items[{{ $item->id }}][anggaran_disetujui]" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required min="0" placeholder="0">
-                                        </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <input type="number" name="items[{{ $item->id }}][jumlah_disetujui]" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required min="0" max="{{ $item->jumlah_diminta }}" value="{{ $item->jumlah_diminta }}">
                                         </td>
@@ -165,7 +166,7 @@
                                 <div>
                                     <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">Tolak Pengajuan</h3>
                                     <div class="mt-2">
-                                        <p class="text-sm text-gray-500 mb-2">Silakan masukkan alasan penolakan untuk Kebun / Pekebun.</p>
+                                        <p class="text-sm text-gray-500 mb-2">Silakan masukkan alasan penolakan untuk Kelompok Tani.</p>
                                         <textarea name="alasan_penolakan" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" rows="4" required></textarea>
                                     </div>
                                 </div>
@@ -192,7 +193,6 @@
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama Barang (Input)</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jenis</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Anggaran (Rp)</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jml Diminta</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Satuan</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jml Disetujui</th>
@@ -204,9 +204,6 @@
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $loop->iteration }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap">{{ $item->nama_barang }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap"><span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-emerald-100 text-emerald-800">{{ $item->jenis_barang ?? '-' }}</span></td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        Rp {{ number_format($item->anggaran_disetujui ?? 0, 0, ',', '.') }}
-                                    </td>
                                     <td class="px-6 py-4 whitespace-nowrap">{{ $item->jumlah_diminta }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $item->satuan ?? '-' }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap font-bold text-green-600">

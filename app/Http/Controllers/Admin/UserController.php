@@ -10,14 +10,36 @@ use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::whereIn('role', ['operator', 'kabid', 'kelompok_tani'])
-            ->orderBy('role')
-            ->orderBy('name')
-            ->paginate(10);
+        $query = User::whereIn('role', ['operator', 'kabid', 'kelompok_tani']);
 
-        return view('admin.users.index', compact('users'));
+        // Filter by role
+        if ($request->filled('role') && in_array($request->role, ['operator', 'kabid', 'kelompok_tani'])) {
+            $query->where('role', $request->role);
+        }
+
+        // Search by name or email
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%")
+                  ->orWhere('kode_kelompok', 'like', "%{$search}%");
+            });
+        }
+
+        $query->orderBy('role')->orderBy('name');
+
+        $users       = $query->paginate(10)->withQueryString();
+        $totalAll    = User::whereIn('role', ['operator', 'kabid', 'kelompok_tani'])->count();
+        $totalPeran  = [
+            'operator'      => User::where('role', 'operator')->count(),
+            'kabid'         => User::where('role', 'kabid')->count(),
+            'kelompok_tani' => User::where('role', 'kelompok_tani')->count(),
+        ];
+
+        return view('admin.users.index', compact('users', 'totalAll', 'totalPeran'));
     }
 
     public function create()

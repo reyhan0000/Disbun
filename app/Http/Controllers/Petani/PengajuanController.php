@@ -23,7 +23,14 @@ class PengajuanController extends Controller
 
     public function index(Request $request)
     {
+        $tab = $request->get('tab', 'proses');
         $query = Pengajuan::where('user_id', auth()->id());
+
+        if ($tab === 'proses') {
+            $query->whereIn('status', ['pending_operator', 'pending_kabid', 'rejected_kabid', 'approved_full_kabid', 'approved_partial_kabid']);
+        } else {
+            $query->whereIn('status', ['approved_full', 'approved_partial', 'rejected_operator', 'rejected_full']);
+        }
 
         if ($request->filled('search')) {
             $search = $request->search;
@@ -46,6 +53,10 @@ class PengajuanController extends Controller
     {
         $user = auth()->user();
         $apiData = $this->kelompokTaniService->getDetails(null, $user->kode_kelompok);
+
+        if (! $apiData) {
+            return redirect()->route('petani.pengajuan.index')->with('error', 'Sistem API pusat sedang mengalami gangguan atau data tidak ditemukan. Pengajuan baru tidak dapat dilakukan saat ini.');
+        }
 
         return view('petani.pengajuan.create', compact('apiData'));
     }

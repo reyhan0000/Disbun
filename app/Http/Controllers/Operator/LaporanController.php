@@ -15,8 +15,8 @@ class LaporanController extends Controller
         $stats = [
             'total' => Pengajuan::count(),
             'pending' => Pengajuan::whereIn('status', ['pending_operator', 'pending_kabid'])->count(),
-            'disetujui' => Pengajuan::whereIn('status', ['approved_full', 'approved_partial', 'approved_kabid'])->count(),
-            'ditolak' => Pengajuan::whereIn('status', ['rejected_operator', 'rejected_kabid'])->count(),
+            'disetujui' => Pengajuan::whereIn('status', ['approved_full', 'approved_partial', 'approved_full_kabid', 'approved_partial_kabid'])->count(),
+            'ditolak' => Pengajuan::whereIn('status', ['rejected_operator', 'rejected_kabid', 'rejected_full'])->count(),
         ];
 
         return view('operator.laporan.index', compact('pengajuans', 'stats'));
@@ -43,8 +43,8 @@ class LaporanController extends Controller
         $stats = [
             'total' => $query->count(),
             'pending' => (clone $query)->whereIn('status', ['pending_operator', 'pending_kabid'])->count(),
-            'disetujui' => (clone $query)->whereIn('status', ['approved_full', 'approved_partial', 'approved_kabid'])->count(),
-            'ditolak' => (clone $query)->whereIn('status', ['rejected_operator', 'rejected_kabid'])->count(),
+            'disetujui' => (clone $query)->whereIn('status', ['approved_full', 'approved_partial', 'approved_full_kabid', 'approved_partial_kabid'])->count(),
+            'ditolak' => (clone $query)->whereIn('status', ['rejected_operator', 'rejected_kabid', 'rejected_full'])->count(),
         ];
 
         return view('operator.laporan.index', compact('pengajuans', 'stats'));

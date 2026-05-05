@@ -11,6 +11,7 @@
         </div>
     </header>
 
+    @if($apiData)
     <!-- Verified Badge -->
     <div class="mb-4 bg-gradient-to-r from-emerald-500 to-teal-600 rounded-lg p-4 shadow-md">
         <div class="flex items-center">
@@ -100,4 +101,20 @@
         <svg class="w-5 h-5 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
         <span>Data di atas terintegrasi langsung dengan API Pusat dan bersifat <em>read-only</em>. Jika terdapat ketidaksesuaian data, silakan hubungi Kantor Dinas Perkebunan Provinsi Jawa Barat.</span>
     </div>
+    @else
+    <div class="mb-4 bg-red-50 border border-red-200 text-red-700 px-4 py-4 rounded-lg shadow-sm">
+        <div class="flex items-center">
+            <svg class="w-6 h-6 mr-3 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            <div>
+                <strong class="font-bold">Gagal Mengambil Data API Pusat!</strong>
+                <p class="text-sm mt-1">Data Kelompok Tani tidak dapat ditarik pada saat ini. Hal ini mungkin karena gangguan server pusat (Sistem SIPERIBUT) atau data kelompok tidak ditemukan.</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="mt-4 flex items-center text-sm text-gray-500 bg-gray-50 p-3 rounded-md border border-gray-100">
+        <svg class="w-5 h-5 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+        <span>Silakan coba muat ulang halaman atau hubungi Administrator jika kendala ini berlanjut. Pengajuan bantuan mungkin tidak dapat dilakukan selama sistem pusat belum dapat diakses.</span>
+    </div>
+    @endif
 </section>

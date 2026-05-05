@@ -17,7 +17,7 @@ class DashboardController extends Controller
             $stats = [
                 'total' => Pengajuan::where('user_id', $user->id)->count(),
                 'disetujui' => Pengajuan::where('user_id', $user->id)->whereIn('status', ['approved_full', 'approved_partial', 'approved_kabid'])->count(),
-                'ditolak' => Pengajuan::where('user_id', $user->id)->whereIn('status', ['rejected_operator', 'rejected_kabid'])->count(),
+                'ditolak' => Pengajuan::where('user_id', $user->id)->whereIn('status', ['rejected_operator', 'rejected_kabid', 'rejected_full'])->count(),
                 'menunggu' => Pengajuan::where('user_id', $user->id)->whereIn('status', ['pending_operator', 'pending_kabid'])->count(),
             ];
             $recent = Pengajuan::where('user_id', $user->id)->latest()->take(5)->get();
@@ -44,7 +44,7 @@ class DashboardController extends Controller
                 'pending_operator' => Pengajuan::where('status', 'pending_operator')->count(),
                 'pending_kabid' => Pengajuan::where('status', 'pending_kabid')->count(),
                 'disetujui' => Pengajuan::whereIn('status', ['approved_full', 'approved_partial', 'approved_kabid'])->count(),
-                'ditolak' => Pengajuan::whereIn('status', ['rejected_operator', 'rejected_kabid'])->count(),
+                'ditolak' => Pengajuan::whereIn('status', ['rejected_operator', 'rejected_kabid', 'rejected_full'])->count(),
             ];
 
             // Komoditas stats (Group by)

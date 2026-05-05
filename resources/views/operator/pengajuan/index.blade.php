@@ -22,7 +22,18 @@
 
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
+                    <div class="mb-6 border-b border-gray-200">
+                        <nav class="-mb-px flex space-x-8">
+                            <a href="{{ route('operator.pengajuan.index', ['tab' => 'masuk']) }}" class="{{ request('tab', 'masuk') == 'masuk' ? 'border-emerald-500 text-emerald-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }} whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
+                                Antrean Masuk
+                            </a>
+                            <a href="{{ route('operator.pengajuan.index', ['tab' => 'riwayat']) }}" class="{{ request('tab', 'masuk') == 'riwayat' ? 'border-emerald-500 text-emerald-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }} whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
+                                Riwayat
+                            </a>
+                        </nav>
+                    </div>
                     <form method="GET" action="{{ route('operator.pengajuan.index') }}" class="mb-6 bg-gray-50 p-4 rounded-lg border border-gray-200">
+                        <input type="hidden" name="tab" value="{{ request('tab', 'masuk') }}">
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                             <div>
                                 <x-input-label for="search" value="Cari (No. Surat/Perihal/Kebun)" />
@@ -32,10 +43,17 @@
                                 <x-input-label for="status" value="Status" />
                                 <select id="status" name="status" class="mt-1 block w-full border-gray-300 focus:border-emerald-500 focus:ring-emerald-500 rounded-md shadow-sm">
                                     <option value="">Semua Status</option>
-                                    <option value="pending_operator" {{ request('status') == 'pending_operator' ? 'selected' : '' }}>Pending Operator</option>
-                                    <option value="pending_kabid" {{ request('status') == 'pending_kabid' ? 'selected' : '' }}>Diteruskan ke Kabid</option>
-                                    <option value="rejected_operator" {{ request('status') == 'rejected_operator' ? 'selected' : '' }}>Ditolak Operator</option>
-                                    <option value="approved_full" {{ request('status') == 'approved_full' ? 'selected' : '' }}>Disetujui</option>
+                                    @if(request('tab', 'masuk') == 'masuk')
+                                        <option value="pending_operator" {{ request('status') == 'pending_operator' ? 'selected' : '' }}>Menunggu Verifikasi</option>
+                                        <option value="approved_full_kabid" {{ request('status') == 'approved_full_kabid' ? 'selected' : '' }}>Menunggu BAST (Disetujui Penuh)</option>
+                                        <option value="approved_partial_kabid" {{ request('status') == 'approved_partial_kabid' ? 'selected' : '' }}>Menunggu BAST (Disetujui Sebagian)</option>
+                                        <option value="rejected_kabid" {{ request('status') == 'rejected_kabid' ? 'selected' : '' }}>Ditolak Kabid</option>
+                                    @else
+                                        <option value="pending_kabid" {{ request('status') == 'pending_kabid' ? 'selected' : '' }}>Diteruskan ke Kabid</option>
+                                        <option value="rejected_operator" {{ request('status') == 'rejected_operator' ? 'selected' : '' }}>Ditolak Operator</option>
+                                        <option value="approved_full" {{ request('status') == 'approved_full' ? 'selected' : '' }}>Selesai (Disetujui)</option>
+                                        <option value="rejected_full" {{ request('status') == 'rejected_full' ? 'selected' : '' }}>Selesai (Ditolak)</option>
+                                    @endif
                                 </select>
                             </div>
                             <div class="flex items-end space-x-2">
@@ -55,7 +73,7 @@
                             <tr>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nomor Surat</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kebun / Pekebun</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kelompok Tani</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
@@ -75,17 +93,27 @@
                                             <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">Ditolak Sistem</span>
                                         @elseif($pengajuan->status == 'pending_kabid')
                                             <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">Menunggu Kabid</span>
-                                        @elseif($pengajuan->status == 'approved_full')
-                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Disetujui Penuh</span>
-                                        @elseif($pengajuan->status == 'approved_partial')
-                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-indigo-100 text-indigo-800">Disetujui Sebagian</span>
+                                        @elseif($pengajuan->status == 'approved_full' || $pengajuan->status == 'approved_partial')
+                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                                Selesai (Disetujui)
+                                            </span>
+                                        @elseif($pengajuan->status == 'approved_full_kabid')
+                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                                Menunggu BAST (Disetujui Penuh)
+                                            </span>
+                                        @elseif($pengajuan->status == 'approved_partial_kabid')
+                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                                                Menunggu BAST (Disetujui Sebagian)
+                                            </span>
                                         @elseif($pengajuan->status == 'rejected_kabid')
-                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">Ditolak Kabid</span>
+                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800 border border-red-200">Upload Surat Penolakan</span>
+                                        @elseif($pengajuan->status == 'rejected_full')
+                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">Selesai (Ditolak)</span>
                                         @endif
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                         <a href="{{ route('operator.pengajuan.show', $pengajuan) }}" class="text-emerald-600 hover:text-emerald-900 font-semibold flex items-center">
-                                            Lihat Detail
+                                            {{ request('tab', 'masuk') == 'masuk' ? 'Tindak Lanjuti' : 'Lihat Detail' }}
                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                                             </svg>

@@ -18,10 +18,15 @@ class PersetujuanController extends Controller
 
     public function index(Request $request)
     {
-        $query = Pengajuan::where(function ($q) {
-            $q->where('status', 'pending_kabid')
-              ->orWhereIn('status', ['approved_full', 'approved_partial', 'rejected_kabid']);
-        });
+        $tab = $request->get('tab', 'masuk');
+        
+        $query = Pengajuan::query();
+
+        if ($tab === 'masuk') {
+            $query->where('status', 'pending_kabid');
+        } else {
+            $query->whereIn('status', ['approved_full', 'approved_partial', 'approved_full_kabid', 'approved_partial_kabid', 'rejected_kabid', 'rejected_full']);
+        }
 
         if ($request->filled('search')) {
             $search = $request->search;
@@ -46,25 +51,35 @@ class PersetujuanController extends Controller
         return view('kabid.persetujuan.show', compact('pengajuan'));
     }
 
+    public function print(Pengajuan $pengajuan)
+    {
+        return view('pengajuan.print-detail', compact('pengajuan'));
+    }
+
     public function approve(Request $request, Pengajuan $pengajuan)
     {
         $request->validate([
             'items' => 'required|array',
-            'items.*.anggaran_disetujui' => 'required|numeric|min:0',
             'items.*.jumlah_disetujui' => 'required|integer|min:0',
         ]);
 
+        $semuaDisetujuiPenuh = true;
         foreach ($request->items as $itemId => $data) {
             $item = $pengajuan->items()->findOrFail($itemId);
 
             $item->update([
-                'anggaran_disetujui' => $data['anggaran_disetujui'],
                 'jumlah_disetujui' => $data['jumlah_disetujui'],
             ]);
+
+            if ($data['jumlah_disetujui'] < $item->jumlah_diminta) {
+                $semuaDisetujuiPenuh = false;
+            }
         }
 
+        $statusBaru = $semuaDisetujuiPenuh ? 'approved_full_kabid' : 'approved_partial_kabid';
+
         $pengajuan->update([
-            'status' => 'approved_kabid',
+            'status' => $statusBaru,
             'verified_kabid_by' => auth()->id(),
             'verified_kabid_at' => now(),
             'verification_notes' => 'Disetujui oleh Kabid. Menunggu unggah BAST oleh Operator.',

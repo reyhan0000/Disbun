@@ -32,7 +32,7 @@
             </div>
             <div class="border p-3 text-center">
                 <p class="text-sm text-gray-500">Disetujui</p>
-                <p class="text-xl font-bold text-green-600">{{ $pengajuans->whereIn('status', ['approved_full', 'approved_partial', 'approved_kabid'])->count() }}</p>
+                <p class="text-xl font-bold text-green-600">{{ $pengajuans->whereIn('status', ['approved_full', 'approved_partial', 'approved_full_kabid', 'approved_partial_kabid'])->count() }}</p>
             </div>
             <div class="border p-3 text-center">
                 <p class="text-sm text-gray-500">Menunggu</p>
@@ -50,7 +50,7 @@
                 <tr>
                     <th class="border border-gray-300 px-2 py-1 text-left text-xs font-bold">No</th>
                     <th class="border border-gray-300 px-2 py-1 text-left text-xs font-bold">Nomor Surat</th>
-                    <th class="border border-gray-300 px-2 py-1 text-left text-xs font-bold">Kebun / Pekebun</th>
+                    <th class="border border-gray-300 px-2 py-1 text-left text-xs font-bold">Kelompok Tani</th>
                     <th class="border border-gray-300 px-2 py-1 text-left text-xs font-bold">Perihal</th>
                     <th class="border border-gray-300 px-2 py-1 text-left text-xs font-bold">Tanggal</th>
                     <th class="border border-gray-300 px-2 py-1 text-left text-xs font-bold">Status</th>
@@ -70,7 +70,8 @@
                                 @case('pending_kabid') Menunggu Kabid @break
                                 @case('approved_full') Disetuji @break
                                 @case('approved_partial') Disetuji Sebagian @break
-                                @case('approved_kabid') Disetuji Kabid @break
+                                @case('approved_full_kabid') Disetuji Kabid Penuh @break
+                                @case('approved_partial_kabid') Disetuji Kabid Sebagian @break
                                 @case('rejected_operator') Ditolak @break
                                 @case('rejected_kabid') Ditolak Kabid @break
                                 @default {{ $pengajuan->status }}

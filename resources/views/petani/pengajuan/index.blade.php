@@ -26,7 +26,19 @@
                             + Buat Pengajuan Baru
                         </a>
                     </div>
+                    
+                    <div class="mb-6 border-b border-gray-200">
+                        <nav class="-mb-px flex space-x-8">
+                            <a href="{{ route('petani.pengajuan.index', ['tab' => 'proses']) }}" class="{{ request('tab', 'proses') == 'proses' ? 'border-emerald-500 text-emerald-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }} whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
+                                Sedang Diproses
+                            </a>
+                            <a href="{{ route('petani.pengajuan.index', ['tab' => 'riwayat']) }}" class="{{ request('tab', 'proses') == 'riwayat' ? 'border-emerald-500 text-emerald-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }} whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
+                                Riwayat / Selesai
+                            </a>
+                        </nav>
+                    </div>
                     <form method="GET" action="{{ route('petani.pengajuan.index') }}" class="mb-6 bg-gray-50 p-4 rounded-lg border border-gray-200">
+                        <input type="hidden" name="tab" value="{{ request('tab', 'proses') }}">
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                             <div>
                                 <x-input-label for="search" value="Cari (No. Surat / Perihal)" />
@@ -61,7 +73,7 @@
                             <tr>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nomor Surat</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kebun / Pekebun</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kelompok Tani</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
@@ -78,15 +90,27 @@
                                         @if($pengajuan->status == 'pending_operator')
                                             <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">Menunggu Operator</span>
                                         @elseif($pengajuan->status == 'rejected_operator')
-                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">Ditolak Sistem</span>
+                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">Ditolak Operator</span>
                                         @elseif($pengajuan->status == 'pending_kabid')
                                             <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">Menunggu Kabid</span>
-                                        @elseif($pengajuan->status == 'approved_full')
-                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Disetujui Penuh</span>
-                                        @elseif($pengajuan->status == 'approved_partial')
-                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-indigo-100 text-indigo-800">Disetujui Sebagian</span>
+                                        @elseif($pengajuan->status == 'approved_full' || $pengajuan->status == 'approved_partial')
+                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                                Selesai (Disetujui)
+                                            </span>
+                                        @elseif($pengajuan->status == 'approved_full_kabid')
+                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+                                                Menunggu BAST (Disetujui Penuh)
+                                            </span>
+                                        @elseif($pengajuan->status == 'approved_partial_kabid')
+                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
+                                                Menunggu BAST (Disetujui Sebagian)
+                                            </span>
                                         @elseif($pengajuan->status == 'rejected_kabid')
-                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">Ditolak Kabid</span>
+                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200">
+                                                Diproses (Menunggu Surat)
+                                            </span>
+                                        @elseif($pengajuan->status == 'rejected_full')
+                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">Ditolak</span>
                                         @endif
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">

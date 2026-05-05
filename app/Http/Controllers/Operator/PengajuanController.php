@@ -22,7 +22,14 @@ class PengajuanController extends Controller
 
     public function index(Request $request)
     {
+        $tab = $request->get('tab', 'masuk');
         $query = Pengajuan::query();
+
+        if ($tab === 'masuk') {
+            $query->whereIn('status', ['pending_operator', 'approved_full_kabid', 'approved_partial_kabid', 'rejected_kabid']);
+        } else {
+            $query->whereNotIn('status', ['pending_operator', 'approved_full_kabid', 'approved_partial_kabid', 'rejected_kabid']);
+        }
 
         if ($request->filled('search')) {
             $search = $request->search;
@@ -47,6 +54,11 @@ class PengajuanController extends Controller
         $apiData = $this->kelompokTaniService->getDetails($pengajuan->nama_kelompok_tani);
 
         return view('operator.pengajuan.show', compact('pengajuan', 'apiData'));
+    }
+
+    public function print(Pengajuan $pengajuan)
+    {
+        return view('pengajuan.print-detail', compact('pengajuan'));
     }
 
     public function verify(Request $request, Pengajuan $pengajuan)
@@ -88,7 +100,7 @@ class PengajuanController extends Controller
 
     public function uploadBast(Request $request, Pengajuan $pengajuan)
     {
-        if ($pengajuan->status !== 'approved_kabid') {
+        if (!in_array($pengajuan->status, ['approved_full_kabid', 'approved_partial_kabid'])) {
             return redirect()->back()->with('error', 'Status pengajuan harus disetujui Kabid terlebih dahulu.');
         }
 
@@ -98,16 +110,8 @@ class PengajuanController extends Controller
 
         $bastPath = $request->file('file_bast')->store('bast_files', 'public');
 
-        $semuaDisetujuiPenuh = true;
-        foreach ($pengajuan->items as $item) {
-            if ($item->jumlah_disetujui < $item->jumlah_diminta) {
-                $semuaDisetujuiPenuh = false;
-                break;
-            }
-        }
-
         $pengajuan->update([
-            'status' => $semuaDisetujuiPenuh ? 'approved_full' : 'approved_partial',
+            'status' => $pengajuan->status === 'approved_full_kabid' ? 'approved_full' : 'approved_partial',
             'file_bast' => $bastPath,
             'verification_notes' => 'Proses Selesai. Dokumen BAST telah diunggah oleh Operator.',
         ]);
@@ -115,5 +119,28 @@ class PengajuanController extends Controller
         $this->notificationService->notifyPersetujuan($pengajuan, 'Selesai (BAST Diunggah)', 'Dokumen BAST telah diunggah oleh Operator. Proses pengajuan selesai.');
 
         return redirect()->route('operator.pengajuan.show', $pengajuan)->with('success', 'Dokumen BAST berhasil diunggah. Pengajuan selesai.');
+    }
+
+    public function uploadSuratPenolakan(Request $request, Pengajuan $pengajuan)
+    {
+        if ($pengajuan->status !== 'rejected_kabid') {
+            return redirect()->back()->with('error', 'Status pengajuan tidak valid untuk unggah surat penolakan.');
+        }
+
+        $request->validate([
+            'file_surat_penolakan' => 'required|file|mimes:pdf,jpg,jpeg,png|max:5120',
+        ]);
+
+        $penolakanPath = $request->file('file_surat_penolakan')->store('surat_penolakan', 'public');
+
+        $pengajuan->update([
+            'status' => 'rejected_full',
+            'file_surat_penolakan' => $penolakanPath,
+            'verification_notes' => 'Surat Penolakan telah diunggah oleh Operator.',
+        ]);
+
+        $this->notificationService->notifyPersetujuan($pengajuan, 'Surat Penolakan Diterbitkan', 'Dokumen Surat Penolakan resmi telah diterbitkan dan diunggah. Silakan periksa detail pengajuan Anda.');
+
+        return redirect()->route('operator.pengajuan.show', $pengajuan)->with('success', 'Dokumen Surat Penolakan berhasil diunggah.');
     }
 }

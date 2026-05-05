@@ -42,7 +42,19 @@
                         <td class="border border-gray-300 px-2 py-1 text-xs">{{ $pengajuan->nama_kelompok_tani }}</td>
                         <td class="border border-gray-300 px-2 py-1 text-xs">{{ $pengajuan->perihal }}</td>
                         <td class="border border-gray-300 px-2 py-1 text-xs">{{ \Carbon\Carbon::parse($pengajuan->tanggal_pengajuan)->translatedFormat('d/m/Y') }}</td>
-                        <td class="border border-gray-300 px-2 py-1 text-xs">{{ $pengajuan->status }}</td>
+                        <td class="border border-gray-300 px-2 py-1 text-xs">
+                            @switch($pengajuan->status)
+                                @case('pending_operator') Menunggu Operator @break
+                                @case('pending_kabid') Menunggu Kabid @break
+                                @case('approved_full') Disetuji Penuh @break
+                                @case('approved_partial') Disetuji Sebagian @break
+                                @case('approved_full_kabid') Disetuji Kabid Penuh @break
+                                @case('approved_partial_kabid') Disetuji Kabid Sebagian @break
+                                @case('rejected_operator') Ditolak @break
+                                @case('rejected_kabid') Ditolak Kabid @break
+                                @default {{ $pengajuan->status }}
+                            @endswitch
+                        </td>
                     </tr>
                 @empty
                     <tr>

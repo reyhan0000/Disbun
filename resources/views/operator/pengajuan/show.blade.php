@@ -7,9 +7,14 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
-            <div class="flex justify-end mb-4">
+            <div class="flex justify-between items-center mb-4">
                 <a href="{{ route('operator.pengajuan.index') }}" class="inline-flex items-center text-sm text-gray-600 hover:text-emerald-700 bg-white border border-gray-300 rounded px-4 py-2 shadow-sm transition">
                     &larr; Kembali ke Antrean
+                </a>
+                <a href="{{ route('operator.pengajuan.print', $pengajuan) }}" target="_blank"
+                    class="inline-flex items-center gap-2 text-sm bg-white border border-gray-300 hover:border-blue-400 hover:text-blue-700 text-gray-600 rounded px-4 py-2 shadow-sm transition">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+                    Cetak / PDF
                 </a>
             </div>
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -33,9 +38,31 @@
                                 <div>
                                     <p class="text-sm text-gray-500">Status</p>
                                     <p class="font-medium">
-                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800 border border-gray-200">
-                                            {{ str_replace('_', ' ', strtoupper($pengajuan->status)) }}
-                                        </span>
+                                        @if($pengajuan->status == 'approved_full' || $pengajuan->status == 'approved_partial')
+                                            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
+                                                Selesai (Disetujui)
+                                            </span>
+                                        @elseif($pengajuan->status == 'approved_full_kabid')
+                                            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800 border border-blue-200">
+                                                Menunggu Upload BAST (Disetujui Penuh)
+                                            </span>
+                                        @elseif($pengajuan->status == 'approved_partial_kabid')
+                                            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-yellow-100 text-yellow-800 border border-yellow-200">
+                                                Menunggu Upload BAST (Disetujui Sebagian)
+                                            </span>
+                                        @elseif($pengajuan->status == 'rejected_kabid')
+                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800 border border-gray-200">
+                                                MENUNGGU UPLOAD SURAT
+                                            </span>
+                                        @elseif($pengajuan->status == 'rejected_full')
+                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800 border border-gray-200">
+                                                DITOLAK (SELESAI)
+                                            </span>
+                                        @else
+                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800 border border-gray-200">
+                                                {{ str_replace('_', ' ', strtoupper($pengajuan->status)) }}
+                                            </span>
+                                        @endif
                                     </p>
                                 </div>
                             </div>
@@ -51,9 +78,9 @@
                             </div>
                             @endif
 
-                            <h3 class="text-lg font-bold mb-4 border-b pb-2 text-emerald-800">2. Profil Kebun / Pekebun</h3>
+                            <h3 class="text-lg font-bold mb-4 border-b pb-2 text-emerald-800">2. Profil Kelompok Tani</h3>
                             <div class="grid grid-cols-2 gap-4 mb-4">
-                                <div class="col-span-2"><p class="text-sm text-gray-500">Nama Kebun / Pekebun</p><p class="font-bold text-lg text-emerald-900">{{ $pengajuan->nama_kelompok_tani }}</p></div>
+                                <div class="col-span-2"><p class="text-sm text-gray-500">Nama Kelompok Tani</p><p class="font-bold text-lg text-emerald-900">{{ $pengajuan->nama_kelompok_tani }}</p></div>
                                 <div><p class="text-sm text-gray-500">No Registrasi (SK)</p><p class="font-medium">{{ $pengajuan->no_kelompok_tani ?? '-' }}</p></div>
                                 <div><p class="text-sm text-gray-500">Nama Ketua Kelompok</p><p class="font-medium">{{ $pengajuan->ketua_kelompok ?? '-' }}</p></div>
                                 <div><p class="text-sm text-gray-500">Kabupaten/Kota</p><p class="font-medium">{{ $pengajuan->kabupaten_kota ?? '-' }}</p></div>
@@ -108,7 +135,7 @@
                         
                         @if($apiData)
                             <div class="grid grid-cols-2 gap-4 mb-4">
-                                <div class="col-span-2"><p class="text-sm font-bold text-emerald-700 uppercase tracking-wide">Nama Kebun / Pekebun</p><p class="font-bold text-lg text-gray-900">{{ $apiData['nama'] }}</p></div>
+                                <div class="col-span-2"><p class="text-sm font-bold text-emerald-700 uppercase tracking-wide">Nama Kelompok</p><p class="font-bold text-lg text-gray-900">{{ $apiData['nama'] }}</p></div>
                                 <div><p class="text-sm font-bold text-emerald-700 uppercase tracking-wide">Kode Kelompok</p><p class="font-medium text-gray-900">{{ $apiData['kode_kelompok'] }}</p></div>
                                 <div><p class="text-sm font-bold text-emerald-700 uppercase tracking-wide">Nama Ketua</p><p class="font-medium text-gray-900">{{ $apiData['nama_ketua'] }}</p></div>
                                 <div class="col-span-2"><p class="text-sm font-bold text-emerald-700 uppercase tracking-wide">Alamat Terdaftar</p><p class="font-medium text-gray-900">{{ $apiData['alamat'] }}, {{ $apiData['kelurahan'] }}, {{ $apiData['kecamatan'] }}, {{ $apiData['kabupaten'] }}</p></div>
@@ -126,9 +153,14 @@
                             </div>
                             @endif
                         @else
-                            <div class="p-4 bg-red-100 border border-red-400 rounded shadow-sm text-sm text-red-800">
-                                <p class="font-bold mb-1">Data Tidak Ditemukan!</p>
-                                <p>Tidak ada data di database pusat yang cocok dengan nama Kebun / Pekebun ini. Pengajuan sebaiknya <strong>ditolak</strong>.</p>
+                            <div class="p-4 bg-amber-50 border border-amber-400 rounded shadow-sm text-sm text-amber-800">
+                                <div class="flex items-start">
+                                    <svg class="w-5 h-5 mr-2 mt-0.5 text-amber-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                    <div>
+                                        <p class="font-bold mb-1">API Pusat Tidak Dapat Dijangkau</p>
+                                        <p>Data real-time dari sistem pusat tidak dapat ditarik saat ini (kemungkinan gangguan server atau blokir jaringan). Data yang ditampilkan di panel kiri bersumber dari data yang diinput saat pengajuan dibuat.</p>
+                                    </div>
+                                </div>
                             </div>
                         @endif
                     </div>
@@ -144,9 +176,6 @@
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama Barang (Input)</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jenis</th>
-                                @if(in_array($pengajuan->status, ['approved_full', 'approved_partial']))
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Anggaran (Rp)</th>
-                                @endif
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jumlah Diminta</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Satuan</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jumlah Disetujui</th>
@@ -158,9 +187,6 @@
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $loop->iteration }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap">{{ $item->nama_barang }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap"><span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-emerald-100 text-emerald-800">{{ $item->jenis_barang ?? '-' }}</span></td>
-                                    @if(in_array($pengajuan->status, ['approved_full', 'approved_partial']))
-                                    <td class="px-6 py-4 whitespace-nowrap text-green-600 font-medium">Rp {{ number_format($item->anggaran_disetujui ?? 0, 0, ',', '.') }}</td>
-                                    @endif
                                     <td class="px-6 py-4 whitespace-nowrap">{{ $item->jumlah_diminta }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $item->satuan ?? '-' }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap font-bold text-green-600">
@@ -203,7 +229,7 @@
                                 <div>
                                     <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">Tolak Pengajuan (Operator)</h3>
                                     <div class="mt-2">
-                                        <p class="text-sm text-gray-500 mb-2">Silakan masukkan alasan penolakan untuk Kebun / Pekebun.</p>
+                                        <p class="text-sm text-gray-500 mb-2">Silakan masukkan alasan penolakan untuk Kelompok Tani.</p>
                                         <textarea name="alasan_penolakan" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" rows="4" required></textarea>
                                     </div>
                                 </div>
@@ -222,11 +248,12 @@
             </div>
             @endif
 
-            @if($pengajuan->status == 'approved_kabid')
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg border-2 border-emerald-500 mt-6">
-                <div class="p-6 text-gray-900">
-                    <h3 class="text-lg font-bold mb-4 border-b pb-2 text-emerald-700">Unggah Dokumen BAST</h3>
-                    <p class="text-sm text-gray-600 mb-6">Pengajuan telah disetujui oleh Kabid. Silakan unggah dokumen Berita Acara Serah Terima (BAST) untuk menyelesaikan proses ini.</p>
+            @if($pengajuan->status == 'approved_full_kabid' || $pengajuan->status == 'approved_partial_kabid')
+            <!-- Form Upload BAST -->
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mt-6 border border-emerald-200">
+                <div class="p-6 bg-emerald-50 border-b border-emerald-200">
+                    <h3 class="text-lg font-bold text-emerald-800 mb-2">Unggah Berita Acara Serah Terima (BAST)</h3>
+                    <p class="text-sm text-emerald-700 mb-4">Pengajuan ini telah <strong>{{ $pengajuan->status == 'approved_full_kabid' ? 'disetujui penuh' : 'disetujui sebagian' }}</strong> oleh Kabid. Silakan unggah dokumen BAST untuk menyelesaikan proses pengajuan.</p>
                     
                     <form action="{{ route('operator.pengajuan.uploadBast', $pengajuan) }}" method="POST" enctype="multipart/form-data">
                         @csrf
@@ -238,6 +265,28 @@
                         </div>
                         <button type="submit" class="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-bold py-2 px-6 rounded shadow-md transform transition hover:-translate-y-0.5 focus:outline-none focus:shadow-outline">
                             Simpan & Selesaikan Pengajuan
+                        </button>
+                    </form>
+                </div>
+            </div>
+            @endif
+
+            @if($pengajuan->status == 'rejected_kabid' && !$pengajuan->file_surat_penolakan)
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg border-2 border-red-500 mt-6">
+                <div class="p-6 text-gray-900 bg-red-50">
+                    <h3 class="text-lg font-bold mb-4 border-b border-red-200 pb-2 text-red-700">Unggah Surat Penolakan</h3>
+                    <p class="text-sm text-gray-600 mb-6">Pengajuan telah <strong class="text-red-600">ditolak</strong> oleh Kabid. Sebagai Operator, Anda harus membuat dan mengunggah Surat Penolakan resmi agar dapat dilihat oleh Kelompok Tani.</p>
+                    
+                    <form action="{{ route('operator.pengajuan.uploadSuratPenolakan', $pengajuan) }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <div class="mb-4">
+                            <label class="block text-gray-700 text-sm font-bold mb-2" for="file_surat_penolakan">
+                                Pilih Surat Penolakan (PDF, JPG, PNG) <span class="text-red-500">*</span>
+                            </label>
+                            <input class="shadow-sm appearance-none border border-red-300 rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-red-500 bg-white" id="file_surat_penolakan" type="file" name="file_surat_penolakan" accept=".pdf,.jpg,.jpeg,.png" required>
+                        </div>
+                        <button type="submit" class="bg-gradient-to-r from-red-500 to-rose-600 hover:from-red-600 hover:to-rose-700 text-white font-bold py-2 px-6 rounded shadow-md transform transition hover:-translate-y-0.5 focus:outline-none focus:shadow-outline">
+                            Unggah & Beritahu Petani
                         </button>
                     </form>
                 </div>
@@ -263,6 +312,38 @@
                             <img src="{{ asset('storage/' . $pengajuan->file_bast) }}" alt="File BAST" class="w-full h-auto border rounded shadow-sm hover:opacity-90 transition-opacity">
                         </a>
                         <p class="text-xs text-gray-500 mt-2">Klik gambar BAST untuk memperbesar</p>
+                    @endif
+                </div>
+            </div>
+            @endif
+
+            @if($pengajuan->file_surat_penolakan)
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mt-6 border border-red-200">
+                <div class="p-6 text-gray-900">
+                    <h3 class="text-lg font-bold mb-4 border-b pb-2 text-red-800">File Surat Penolakan</h3>
+                    @if(Str::endsWith(strtolower($pengajuan->file_surat_penolakan), ['.pdf']))
+                        <div class="border rounded p-4 text-center bg-red-50">
+                            <svg class="mx-auto h-12 w-12 text-red-500 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                            </svg>
+                            <p class="text-sm text-gray-600 mb-2">Dokumen Surat Penolakan berformat PDF</p>
+                            <a href="{{ asset('storage/' . $pengajuan->file_surat_penolakan) }}" target="_blank" class="inline-flex items-center px-4 py-2 bg-red-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-700">
+                                Buka Surat Penolakan
+                            </a>
+                        </div>
+                    @else
+                        <div class="border border-red-200 rounded p-2 bg-gray-50">
+                            <a href="{{ asset('storage/' . $pengajuan->file_surat_penolakan) }}" target="_blank" class="block">
+                                <img src="{{ asset('storage/' . $pengajuan->file_surat_penolakan) }}" alt="Surat Penolakan" class="w-full h-auto max-h-96 object-contain border border-gray-200 rounded shadow-sm hover:opacity-90 transition-opacity mx-auto">
+                            </a>
+                            <div class="mt-4 flex justify-between items-center px-2 pb-2">
+                                <p class="text-xs text-gray-500">Klik gambar untuk memperbesar</p>
+                                <a href="{{ asset('storage/' . $pengajuan->file_surat_penolakan) }}" download class="inline-flex items-center px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-bold rounded shadow-sm transition-colors">
+                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                                    Unduh Dokumen
+                                </a>
+                            </div>
+                        </div>
                     @endif
                 </div>
             </div>

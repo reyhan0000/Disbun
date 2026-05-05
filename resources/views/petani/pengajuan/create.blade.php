@@ -39,12 +39,12 @@
 
                         <div class="mb-6 border-b border-emerald-100 pb-6">
                             <div class="flex items-center justify-between mb-4">
-                                <h4 class="text-lg font-semibold text-emerald-800 flex items-center"><span class="bg-emerald-600 text-white rounded-full w-6 h-6 inline-flex items-center justify-center text-sm mr-2">2</span> Profil Kebun / Pekebun</h4>
+                                <h4 class="text-lg font-semibold text-emerald-800 flex items-center"><span class="bg-emerald-600 text-white rounded-full w-6 h-6 inline-flex items-center justify-center text-sm mr-2">2</span> Profil Kelompok Tani</h4>
                                 <span class="bg-emerald-100 text-emerald-800 text-xs font-bold px-2 py-1 rounded">Otomatis dari Sistem Pusat</span>
                             </div>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 bg-gray-50 p-4 rounded-md border border-gray-200">
                                 <div>
-                                    <label class="block text-gray-700 text-sm font-bold mb-2">Nama Kebun / Pekebun</label>
+                                    <label class="block text-gray-700 text-sm font-bold mb-2">Nama Kelompok Tani</label>
                                     <input class="shadow-sm appearance-none border border-gray-300 rounded-md w-full py-2 px-3 text-gray-500 bg-gray-100 leading-tight cursor-not-allowed" type="text" value="{{ $apiData['nama'] ?? Auth::user()->name }}" disabled>
                                 </div>
                                 <div>
@@ -134,7 +134,7 @@
                                     Scan Surat Pengajuan / Proposal Resmi (PDF/JPG) <span class="text-red-500">*</span>
                                 </label>
                                 <input class="shadow-sm appearance-none border border-gray-300 rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white" id="file_surat_pengajuan" type="file" name="file_surat_pengajuan" accept="image/*,application/pdf" required>
-                                <p class="text-xs text-emerald-600 mt-2"><svg class="w-4 h-4 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg> Silakan unggah satu file yang memuat surat permohonan resmi Anda.</p>
+                                <p class="text-xs text-emerald-600 mt-2"><svg class="w-4 h-4 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg> Silakan unggah satu file yang memuat surat permohonan resmi Kelompok Tani. (Max 2MB)</p>
                             </div>
                         </div>
 
@@ -193,11 +193,11 @@
 
         function confirmSubmit() {
             const nomorSurat = document.querySelector('input[name="nomor_surat"]').value || '-';
-            const namaKebun = {!! json_encode($apiData['nama'] ?? Auth::user()->name) !!};
+            const namaKelompok = {!! json_encode($apiData['nama'] ?? Auth::user()->name) !!};
 
             const msg = 'Konfirmasi Pengajuan Baru:\n\n' +
                 '• Nomor Surat: ' + nomorSurat + '\n' +
-                '• Kebun / Pekebun: ' + namaKebun + '\n\n' +
+                '• Nama Kelompok: ' + namaKelompok + '\n\n' +
                 'Apakah Anda yakin ingin mengajukan bantuan? Data yang sudah dikirim tidak dapat diubah.';
 
             if (!confirm(msg)) {

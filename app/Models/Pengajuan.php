@@ -28,6 +28,7 @@ class Pengajuan extends Model
         'verified_kabid_by',
         'verified_kabid_at',
         'kategori',
+        'file_surat_penolakan',
     ];
 
     public function items()

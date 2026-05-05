@@ -29,7 +29,8 @@
                                 <option value="pending_kabid" {{ request('status') == 'pending_kabid' ? 'selected' : '' }}>Menunggu Kabid</option>
                                 <option value="approved_full" {{ request('status') == 'approved_full' ? 'selected' : '' }}>Disetujui Full</option>
                                 <option value="approved_partial" {{ request('status') == 'approved_partial' ? 'selected' : '' }}>Disetujui Sebagian</option>
-                                <option value="approved_kabid" {{ request('status') == 'approved_kabid' ? 'selected' : '' }}>Disetujui Kabid</option>
+                                <option value="approved_full_kabid" {{ request('status') == 'approved_full_kabid' ? 'selected' : '' }}>Disetujui Kabid Penuh</option>
+                                <option value="approved_partial_kabid" {{ request('status') == 'approved_partial_kabid' ? 'selected' : '' }}>Disetujui Kabid Sebagian</option>
                                 <option value="rejected_operator" {{ request('status') == 'rejected_operator' ? 'selected' : '' }}>Ditolak Operator</option>
                                 <option value="rejected_kabid" {{ request('status') == 'rejected_kabid' ? 'selected' : '' }}>Ditolak Kabid</option>
                             </select>
@@ -91,8 +92,11 @@
                                                 @case('approved_partial')
                                                     <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Disetujui Sebagian</span>
                                                     @break
-                                                @case('approved_kabid')
-                                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Disetujui Kabid</span>
+                                                @case('approved_full_kabid')
+                                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">Disetujui Kabid Penuh</span>
+                                                    @break
+                                                @case('approved_partial_kabid')
+                                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">Disetujui Kabid Sebagian</span>
                                                     @break
                                                 @case('rejected_operator')
                                                     <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">Ditolak Operator</span>

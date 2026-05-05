@@ -71,7 +71,33 @@ class NotificationService
 
     public function notifyPersetujuan(Pengajuan $pengajuan, $keputusan, $note = '')
     {
-        // Notifikasi ke Petani
+        if ($pengajuan->status === 'rejected_kabid') {
+            // Beri tahu Operator untuk membuat Surat Penolakan
+            $operators = User::where('role', 'operator')->get();
+            foreach ($operators as $op) {
+                $this->send(
+                    $op->id,
+                    'Perlu Unggah Surat Penolakan',
+                    "Pengajuan dari {$pengajuan->nama_kelompok_tani} ditolak oleh Kabid. Silakan buat dan unggah Surat Penolakan resmi.",
+                    'persetujuan',
+                    $pengajuan->id,
+                    Pengajuan::class
+                );
+            }
+
+            // Notifikasi ke Petani (disamarkan/tanpa catatan internal Kabid)
+            $this->send(
+                $pengajuan->user_id,
+                'Status Pengajuan',
+                "Pengajuan {$pengajuan->nomor_surat} telah selesai ditinjau Kabid. Menunggu penerbitan Surat Keputusan oleh Operator.",
+                'persetujuan',
+                $pengajuan->id,
+                Pengajuan::class
+            );
+            return;
+        }
+
+        // Notifikasi default ke Petani
         $this->send(
             $pengajuan->user_id,
             'Status Pengajuan Bantuan',
